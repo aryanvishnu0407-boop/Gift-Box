@@ -1,20 +1,50 @@
-// Stage 1 Action: Burst Particles & Trigger Album State
+// Ambient particle background generator (runs automatically on load)
+document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById('particle-container');
+    if (container) {
+        for (let i = 0; i < 25; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('ambient-particle');
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+            particle.style.animationDuration = `${6 + Math.random() * 6}s`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            container.appendChild(particle);
+        }
+    }
+});
+
+// Stage 1 Action: Burst Particles & Trigger Album State with Smooth Sound Fade-In
 function openGift() {
     const box = document.querySelector('.box-container');
     const music = document.getElementById('bg-music');
     
-    // Play the background music track immediately
-    music.play().catch(e => console.log("Music auto-play layout blocked until physical user interaction. Continuing safety scripts."));
+    // Smoothly fade audio in
+    music.volume = 0;
+    music.play().then(() => {
+        let vol = 0;
+        const fadeAudio = setInterval(() => {
+            if (vol < 0.8) {
+                vol += 0.1;
+                music.volume = vol;
+            } else {
+                clearInterval(fadeAudio);
+            }
+        }, 200);
+    }).catch(e => console.log("Audio autoplay restricted by browser policy until interaction."));
 
-    // Add explosion particle burst rings
+    // Add explosion particle burst rings & screen shake effect
     box.classList.add('explode');
+    document.body.classList.add('screen-shake');
+    setTimeout(() => document.body.classList.remove('screen-shake'), 500);
+    
     createParticles(box);
 
     // Fade out gift box wrapper layout and boot up Album layout seamlessly
     setTimeout(() => {
         document.getElementById('gift-stage').classList.remove('active');
         document.getElementById('album-stage').classList.add('active');
-    }, 1000);
+    }, 900);
 }
 
 // Sparkle Particle Burst Vector Engine
@@ -23,21 +53,19 @@ function createParticles(element) {
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 60; i++) {
         const particle = document.createElement('div');
         particle.classList.add('burst-particle');
         
-        // Random coloring parameters for luxury aesthetic
-        const colors = ['#ff477e', '#ff7096', '#ff85a1', '#fbb1bd', '#fffb00'];
+        // Luxury romantic palette
+        const colors = ['#ff477e', '#ff7096', '#ffb3c6', '#ffffff', '#ffd166'];
         particle.style.background = colors[Math.floor(Math.random() * colors.length)];
         
-        // Positioning offsets
         particle.style.left = centerX + 'px';
         particle.style.top = centerY + 'px';
 
-        // Direct random vector coordinate outputs via CSS custom variables
         const angle = Math.random() * Math.PI * 2;
-        const velocity = 50 + Math.random() * 150;
+        const velocity = 80 + Math.random() * 220;
         const x = Math.cos(angle) * velocity;
         const y = Math.sin(angle) * velocity;
         
@@ -45,7 +73,7 @@ function createParticles(element) {
         particle.style.setProperty('--y', `${y}px`);
 
         document.body.appendChild(particle);
-        setTimeout(() => particle.remove(), 1000);
+        setTimeout(() => particle.remove(), 1200);
     }
 }
 
@@ -53,12 +81,10 @@ function createParticles(element) {
 const pages = document.querySelectorAll('.page');
 let zIndexCounter = pages.length;
 
-// Loop and apply structural indexes dynamically
 pages.forEach((page, index) => {
     page.style.zIndex = zIndexCounter - index;
 
     page.addEventListener('click', (e) => {
-        // Prevent clicking the special letter box click event from accidentally double flipping pages
         if (e.target.classList.contains('pulse-text') || e.target.classList.contains('end-page')) return;
 
         if (page.classList.contains('flipped')) {
@@ -71,16 +97,15 @@ pages.forEach((page, index) => {
     });
 });
 
-// Stage 3 Action: Route to love letter layout and play progressive typewriter entry animations
+// Stage 3 Action: Route to love letter layout and trigger staggered cinematic entry
 function goToLetter() {
     document.getElementById('album-stage').classList.remove('active');
     document.getElementById('letter-stage').classList.add('active');
 
-    // Run cascade progressive layout timers for each paragraph block inside the letter DOM
     const paragraphs = document.querySelectorAll('.letter-content p');
     paragraphs.forEach((p, index) => {
         setTimeout(() => {
             p.classList.add('fade-in-active');
-        }, index * 1200); // 1.2-second fluid delayed cascading entry per line
+        }, index * 900); // Fluid delayed cascading entry per line
     });
 }
