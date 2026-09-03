@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Gift For You</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for Elegant Typography -->
+    <link href="https://googleapis.com" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Background Ambient Music (Hidden) -->
+    <!-- REPLACE 'music.mp3' with your own music file link later -->
+    <audio id="bg-music" loop src="music.mp3"></audio>
+
+    <!-- STAGE 1: THE 3D GIFT BOX SCREEN -->
+    <div id="gift-stage" class="stage active">
+        <div class="hint-text">Click the box to open your gift...</div>
+        <div class="scene">
+            <div class="box-container" onclick="openGift()">
+                <div class="box-lid">
+                    <div class="lid-top"></div>
+                    <div class="lid-left"></div>
+                    <div class="lid-right"></div>
+                    <div class="lid-front"></div>
+                    <div class="lid-back"></div>
+                </div>
+                <div class="box-body">
+                    <div class="body-left"></div>
+                    <div class="body-right"></div>
+                    <div class="body-front"></div>
+                    <div class="body-back"></div>
+                </div>
+                <div class="ribbon-vertical"></div>
+                <div class="ribbon-horizontal"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAGE 2: THE DIGITAL INTERACTIVE PHOTO ALBUM -->
+    <div id="album-stage" class="stage">
+        <div class="album-container">
+            <div class="book">
+                
+                <!-- Cover Page -->
+                <div class="page cover" id="p1">
+                    <div class="front-content">
+                        <h1>Our Memories</h1>
+                        <p>A collection of beautiful moments...</p>
+                        <span class="swipe-hint">Click pages to flip →</span>
+                    </div>
+                    <div class="back-content">
+                        <!-- Image 1 -->
+                        <img src="images/photo1.jpg" alt="Memory 1">
+                    </div>
+                </div>
+
+                <!-- Page 2 -->
+                <div class="page" id="p2">
+                    <div class="front-content">
+                        <!-- Image 2 -->
+                        <img src="images/photo2.jpg" alt="Memory 2">
+                    </div>
+                    <div class="back-content">
+                        <!-- Image 3 -->
+                        <img src="images/photo3.jpg" alt="Memory 3">
+                    </div>
+                </div>
+
+                <!-- Page 3 -->
+                <div class="page" id="p3">
+                    <div class="front-content">
+                        <!-- Image 4 -->
+                        <img src="images/photo4.jpg" alt="Memory 4">
+                    </div>
+                    <div class="back-content">
+                        <!-- Image 5 -->
+                        <img src="images/photo5.jpg" alt="Memory 5">
+                    </div>
+                </div>
+
+                <!-- Page 4 / Transition Page -->
+                <div class="page" id="p4">
+                    <div class="front-content">
+                        <!-- Image 6 -->
+                        <img src="images/photo6.jpg" alt="Memory 6">
+                    </div>
+                    <div class="back-content end-page" onclick="goToLetter()">
+                        <h2>One Last Thing...</h2>
+                        <p class="pulse-text">Click here to read my letter</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- STAGE 3: THE HEARTFELT LETTER SCREEN -->
+    <div id="letter-stage" class="stage">
+        <div class="letter-wrapper">
+            <div class="heart-icon">❤️</div>
+            <div class="letter-content">
+                <p class="fade-in-text">Dear [Name],</p>
+                <p class="fade-in-text">I wanted to create something special to look back at all the amazing times we've shared together. Every photo in that album represents a moment where you made my world a little brighter.</p>
+                <p class="fade-in-text">Thank you for being such an incredible part of my life. Your smile, your laughs, and your warmth mean everything to me.</p>
+                <p class="fade-in-text">Here is to creating thousands of more beautiful memories together, side by side.</p>
+                <p class="fade-in-text signature">With all my love,<br>[Your Name]</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

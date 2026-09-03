@@ -1,0 +1,247 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: linear-gradient(135deg, #ffeef8 0%, #ffd3e8 100%);
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Stage Layout Controls */
+.stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease-in-out;
+}
+
+.stage.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* --- STAGE 1: 3D GIFT BOX STYLES --- */
+#gift-stage {
+    flex-direction: column;
+}
+
+.hint-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2rem;
+    color: #ff477e;
+    margin-bottom: 50px;
+    animation: floatHint 2s infinite ease-in-out;
+}
+
+.scene {
+    width: 200px;
+    height: 200px;
+    perspective: 600px;
+}
+
+.box-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(-20deg) rotateY(45deg);
+    transition: transform 1s ease;
+    cursor: pointer;
+}
+
+.box-container:hover {
+    transform: rotateX(-20deg) rotateY(65deg) scale(1.05);
+}
+
+/* Box Faces Base Construction */
+.box-body, .box-lid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+}
+
+.box-body div, .box-lid div {
+    position: absolute;
+    background: #ff5e7e;
+    border: 2px solid #ff477e;
+}
+
+/* 3D Box Modeling dimensions */
+.box-body div { width: 200px; height: 200px; }
+.body-front  { transform: rotateY(0deg) translateZ(100px); }
+.body-back   { transform: rotateY(180deg) translateZ(100px); }
+.body-left   { transform: rotateY(-90deg) translateZ(100px); }
+.body-right  { transform: rotateY(90deg) translateZ(100px); }
+
+/* Ribbon cross overlays */
+.ribbon-vertical, .ribbon-horizontal {
+    position: absolute;
+    background: #fffb00 !important;
+    z-index: 10;
+}
+.ribbon-vertical { width: 40px; height: 100%; left: 80px; transform: translateZ(101px); }
+
+/* Lid styling */
+.box-lid div { width: 210px; height: 40px; background: #ff477e; }
+.box-lid .lid-top { width: 210px; height: 210px; transform: rotateX(90deg) translateZ(105px); background: #ff477e;}
+.lid-front { transform: rotateY(0deg) translateZ(105px); top: -5px; left: -5px;}
+.lid-back  { transform: rotateY(180deg) translateZ(105px); top: -5px; left: -5px;}
+.lid-left  { transform: rotateY(-90deg) translateZ(105px); top: -5px; left: -5px;}
+.lid-right { transform: rotateY(90deg) translateZ(105px); top: -5px; left: -5px;}
+
+.box-container.explode .box-lid {
+    transform: translateY(-300px) rotateX(45deg) rotateY(45deg);
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.box-container.explode .box-body {
+    transform: scale(0);
+    opacity: 0;
+    transition: all 0.5s ease-in;
+}
+
+/* Particle effect generation styles */
+.burst-particle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #ff0077;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: explodeParticle 1s forwards ease-out;
+}
+
+/* --- STAGE 2: 3D PHOTO ALBUM STYLES --- */
+.album-container {
+    perspective: 1500px;
+}
+
+.book {
+    position: relative;
+    width: 450px;
+    height: 600px;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+}
+
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+    cursor: pointer;
+}
+
+.front-content, .back-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    border-radius: 0 10px 10px 0;
+    box-shadow: inset 3px 0 20px rgba(0,0,0,0.1), 5px 5px 15px rgba(0,0,0,0.1);
+}
+
+.back-content {
+    transform: rotateY(180deg);
+    border-radius: 10px 0 0 10px;
+}
+
+.page img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Album Content Aesthetics */
+.cover .front-content {
+    background: #ff477e;
+    color: white;
+}
+.cover h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; margin-bottom: 20px; }
+.swipe-hint { font-size: 0.9rem; opacity: 0.8; margin-top: 40px; }
+.end-page { background: #333; color: #fff; text-align: center; }
+.end-page h2 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: #ff477e; }
+
+/* Flipping Mechanic Engine States */
+.page.flipped {
+    transform: rotateY(-180deg);
+}
+.page.flipped:last-child {
+    z-index: 1;
+}
+
+/* --- STAGE 3: THE HEARTFELT LETTER STYLES --- */
+.letter-wrapper {
+    max-width: 600px;
+    background: #ffffff;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(255, 71, 126, 0.15);
+    text-align: center;
+    border: 1px solid #ffdae9;
+}
+
+.heart-icon {
+    font-size: 3rem;
+    animation: heartbeat 1.2s infinite;
+    margin-bottom: 20px;
+}
+
+.letter-content {
+    font-family: 'Poppins', sans-serif;
+    color: #4a4a4a;
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+.letter-content p {
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.letter-content .signature {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.2rem;
+    color: #ff477e;
+    margin-top: 30px;
+}
+
+/* --- SYSTEM ANIMATION ENGINES --- */
+@keyframes floatHint { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+@keyframes explodeParticle {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+}
+.pulse-text { animation: heartbeat 2s infinite ease-in-out; margin-top: 15px; color: #aaa; cursor: pointer; }
+.fade-in-active { opacity: 1 !important; transform: translateY(0) !important; transition: all 1s ease; }
